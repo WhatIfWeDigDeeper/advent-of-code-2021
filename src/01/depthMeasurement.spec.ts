@@ -1,12 +1,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+const NO_PREVIOUS_ITEM = null;
+
+type Previous = number | null;
 type Result = {
   count: number;
-  previous: number | null;
+  previous: Previous;
 };
 
-type Predicate = (prev: number | null, curr: number) => boolean;
+type Predicate = (prev: Previous, curr: number) => boolean;
 
 const getCount =
   (predicate: Predicate) =>
@@ -22,14 +25,12 @@ const getCount =
   };
 
 const increasedCountPredicate = (
-  previous: number | null,
+  previous: Previous,
   current: number
-): boolean => previous !== null && current > previous;
+): boolean => previous !== NO_PREVIOUS_ITEM && current > previous;
 
-const equalCountPredicate = (
-  previous: number | null,
-  current: number
-): boolean => previous !== null && current === previous;
+const equalCountPredicate = (previous: Previous, current: number): boolean =>
+  previous !== NO_PREVIOUS_ITEM && current === previous;
 
 const getIncreasedCount = getCount(increasedCountPredicate);
 const getEqualCount = getCount(equalCountPredicate);
