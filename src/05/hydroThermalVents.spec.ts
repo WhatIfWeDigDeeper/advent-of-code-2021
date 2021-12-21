@@ -1,11 +1,20 @@
 import { calculateDangerousVentCount } from './hydroThermalVents';
 
-test('read sample input from file', () => {
-  const dangerousVentCount = calculateDangerousVentCount('05/sample.txt');
-  expect(dangerousVentCount).toBe(5);
-});
+type TestInput = {
+  file: string;
+  includeDiagonals: boolean;
+  expected: number;
+};
 
-test('exercise file', () => {
-  const dangerousVentCount = calculateDangerousVentCount('05/input.txt');
-  expect(dangerousVentCount).toBe(6005);
+test.each([
+  { file: 'sample.txt', includeDiagonals: false, expected: 5 },
+  { file: 'sample.txt', includeDiagonals: true, expected: 12 },
+  { file: 'input.txt', includeDiagonals: false, expected: 6005 },
+  { file: 'input.txt', includeDiagonals: true, expected: 23837 },
+])('for %s', (input: TestInput) => {
+  const dangerousVentCount = calculateDangerousVentCount(
+    `05/${input.file}`,
+    input.includeDiagonals
+  );
+  expect(dangerousVentCount).toEqual(input.expected);
 });
